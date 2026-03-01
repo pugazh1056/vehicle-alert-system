@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vehicle Monitoring Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        .main-wrapper {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-left: 4px solid #38bdf8;
+            padding-left: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            opacity: 0.8;
+        }
+
+        input, select {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: #334155;
+            color: white;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 0 2px #38bdf8;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(90deg, #2563eb, #38bdf8);
+            color: white;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .alert-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .alert-card {
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .high {
+            background-color: #dc2626;
+        }
+
+        .medium {
+            background-color: #f59e0b;
+        }
+
+        .safe {
+            background-color: #16a34a;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+
+    <h1>🚗 Vehicle Fault Detection System</h1>
+
+    <!-- Sensor Input Card -->
+    <div class="card">
+        <div class="section-title">Sensor Input Panel</div>
+
+        <form method="POST">
+            <div class="grid">
+
+                <div class="input-group">
+                    <label>Engine Temperature (°C)</label>
+                    <input type="number" step="any" name="engine_temp" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Fuel Level (%)</label>
+                    <input type="number" step="any" name="fuel_level" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Battery Voltage (V)</label>
+                    <input type="number" step="any" name="battery_voltage" required>
+                </div>
+
+                <div class="input-group">
+                    <label>RPM</label>
+                    <input type="number" step="any" name="rpm" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Oil Pressure</label>
+                    <input type="number" step="any" name="oil_pressure" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Brake Status</label>
+                    <select name="brake_status">
+                        <option value="OK">OK</option>
+                        <option value="FAIL">FAIL</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit">Analyze Vehicle</button>
+        </form>
+    </div>
+
+    <!-- Alerts Card -->
+    <div class="card">
+        <div class="section-title">System Alerts</div>
+
+        <div class="alert-container">
+            {% if alerts %}
+                {% for fault, priority in alerts %}
+                    <div class="alert-card {{ priority|lower }}">
+                        {{ fault }} - {{ priority }} Priority
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert-card safe">
+                    No issues detected. Vehicle Status: SAFE ✅
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
